@@ -1,4 +1,4 @@
-.input{
+.input {
   width: 50%;
   height: 1.6rem;
   border-radius: var(--border-radius);
@@ -7,7 +7,7 @@
   font-family: var(--font-mono);
 }
 
-.ul{
+.ul {
   list-style-type: none;
   display: flex;
   justify-content: center;
@@ -15,7 +15,7 @@
   gap: 2rem;
 }
 
-.li{
+.li {
   background: rgba(var(--card-rgb), 0.1);
   border: 1px solid rgba(var(--card-border-rgb), 0.15);
   border-radius: var(--border-radius);
@@ -23,12 +23,12 @@
   text-align: center;
 }
 
-.li:hover{
-    background: rgba(var(--card-rgb), 0.5);
-    border: 1px solid rgba(var(--card-border-rgb)); 
+.li:hover {
+  background: rgba(var(--card-rgb), 0.5);
+  border: 1px solid rgba(var(--card-border-rgb));
 }
 
-.h2{
+.h2 {
   font-family: var(--font-mono);
   padding: 1rem;
 }
