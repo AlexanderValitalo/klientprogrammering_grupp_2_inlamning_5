@@ -1,0 +1,17 @@
+{
+  "name": "klientprogrammering_grupp_2_inlamning_4_5",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "idb": "^8.0.0",
+    "next": "14.2.2",
+    "react": "^18",
+    "react-dom": "^18"
+  }
+}
