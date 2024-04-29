@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import openDatabase from "@/data/db";
 import styles from "./AddRecipeForm.module.css";
+import IngredientInput from "./IngredientInput";
 
 const feedbackDuration = 3000;
 let addedTitle = "";
@@ -10,47 +11,59 @@ let addedTitle = "";
 export default function AddRecipeForm() {
   const [recipeExist, setRecipeExist] = useState(false);
   const [addRecipeFeedback, setAddRecipeFeedback] = useState(false);
-  const [formData, setFormData] = useState({ title: "", ingredients: "", cookingInstructions: "" });
+  const [formData, setFormData] = useState({
+    title: "",
+    ingredients: [{ name: "", quantity: "", unit: "" }],
+    cookingInstructions: "",
+  });
 
   //Handles form submission
   const handleCreateClick = async (event) => {
     event.preventDefault();
 
-    const db = await openDatabase();
+    try {
+      const db = await openDatabase();
 
-    const recipes = await db.getAll("recipes");
+      const recipes = await db.getAll("recipes");
 
-    let recipeFound = false;
+      let recipeFound = false;
 
-    // Check if the recipe already exists in the database
-    recipes.forEach((recipe) => {
-      if (recipe.title == formData.title) {
-        setRecipeExist(true);
-        recipeFound = true;
-      }
-    });
-
-    if (recipeFound) {
-      return; //If a recipe with this title already exists, exit function
-    }
-
-    // Add the recipe to the database if it doesn't exist
-    if (!recipeFound) {
-      await db.add("recipes", {
-        title: formData.title,
-        ingredients: formData.ingredients,
-        cookingInstructions: formData.cookingInstructions,
+      // Check if the recipe already exists in the database
+      recipes.forEach((recipe) => {
+        if (recipe.title == formData.title) {
+          setRecipeExist(true);
+          recipeFound = true;
+        }
       });
+
+      if (recipeFound) {
+        return; //If a recipe with this title already exists, exit function
+      }
+
+      // Add the recipe to the database if it doesn't exist
+      if (!recipeFound) {
+        await db.add("recipes", {
+          title: formData.title,
+          ingredients: formData.ingredients,
+          cookingInstructions: formData.cookingInstructions,
+        });
+      }
+      setAddRecipeFeedback(true); //set state to display feedback for added recipe
+      addedTitle = formData.title; //store title of added recipe for feedback display
+
+      setFormData({
+        title: "",
+        ingredients: [{ name: "", quantity: "", unit: "" }],
+        cookingInstructions: "",
+      });
+
+      //Timer hides feedback message after the set feedbackDuration time
+      setTimeout(() => {
+        setAddRecipeFeedback(false);
+      }, feedbackDuration);
+    } catch (error) {
+      console.error("Error adding recipe to the database", error);
     }
-    setAddRecipeFeedback(true); //set state to display feedback for added recipe
-    addedTitle = formData.title; //store title of added recipe for feedback display
-
-    setFormData({ title: "", ingredients: "", cookingInstructions: "" });
-
-    //Timer hides feedback message after the set feedbackDuration time
-    setTimeout(() => {
-      setAddRecipeFeedback(false);
-    }, feedbackDuration);
   };
 
   //Handles changes in the form fields
@@ -61,8 +74,35 @@ export default function AddRecipeForm() {
     //Updates form data with the new value
     setFormData({ ...formData, [fieldName]: value });
 
+    // For nested objects within arrays, create a new array with updated values
+    if (fieldName === "ingredient" || fieldName === "quantity" || fieldName === "unit") {
+      const newIngredients = formData.ingredients.map((ingredient, index) => {
+        if (index.toString() === event.target.dataset.index) {
+          return { ...ingredient, [fieldName]: value };
+        }
+        return ingredient;
+      });
+      setFormData({ ...formData, ingredients: newIngredients });
+    }
+
     setRecipeExist(false);
   }
+
+  const addIngredient = () => {
+    setFormData({
+      ...formData,
+      ingredients: [...formData.ingredients, { name: "", quantity: "", unit: "" }],
+    });
+  };
+
+  const removeIngredient = (index) => {
+    const newIngredients = [...formData.ingredients];
+    newIngredients.splice(index, 1);
+    setFormData({
+      ...formData,
+      ingredients: newIngredients,
+    });
+  };
 
   //JSX rendering of component
   return (
@@ -80,18 +120,22 @@ export default function AddRecipeForm() {
           onChange={handleChangeForm}
         />
 
-        <label className={styles.label} htmlFor="ingredients">
+        <label htmlFor="ingredient-div" className={styles.label}>
           Ingredients
         </label>
-        <textarea
-          className={styles.textarea}
-          id="ingredients"
-          name="ingredients"
-          placeholder="Ingredients..."
-          required
-          value={formData.ingredients}
-          onChange={handleChangeForm}
-        />
+        {formData.ingredients.map((ingredient, index) => (
+          <IngredientInput
+            key={index}
+            ingredient={ingredient}
+            index={index}
+            removeIngredient={removeIngredient}
+            formData={formData}
+            setFormData={setFormData}
+          />
+        ))}
+        <button className={styles.addButton} type="button" onClick={addIngredient}>
+          Add Ingredient
+        </button>
 
         <label className={styles.label} htmlFor="cookingInstructions">
           Cooking instructions

@@ -12,12 +12,55 @@
 }
 
 .input {
-  width: 50%;
   height: 1.6rem;
   border-radius: var(--border-radius);
   padding: 0.4rem;
   margin-top: 0.2rem;
   font-family: var(--font-mono);
+}
+
+.ingredients {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 0.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.ingredientName {
+  flex-grow: 5;
+  width: 5rem;
+}
+
+.ingredientInput {
+  flex-grow: 2;
+  width: 2rem;
+}
+
+.removeButton {
+  flex-grow: 1;
+  min-width: fit-content;
+  height: 1.6rem;
+  background-color: #c01b1b;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--border-radius);
+  font-family: var(--font-mono);
+  margin-top: 0.2rem;
+}
+
+.addButton {
+  min-width: fit-content;
+  padding: 0 0.4rem;
+  height: 1.6rem;
+  background-color: #1c26b8;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--border-radius);
+  font-family: var(--font-mono);
+  margin-top: 0.2rem;
 }
 
 .textarea {
