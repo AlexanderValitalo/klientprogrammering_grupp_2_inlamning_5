@@ -17,10 +17,13 @@ export default function SearchRecipe() {
       const recipes = await db.getAll("recipes");
 
       //filter recipes based on the search input
+      // search is case insensitive and searches for the search term in the recipe title and ingredients
       const filteredRecipes = recipes.filter(
         (recipe) =>
           recipe.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          recipe.ingredients.toLowerCase().includes(searchTerm.toLowerCase())
+          recipe.ingredients.some((ingredient) =>
+            ingredient.name.toLowerCase().includes(searchTerm.toLowerCase())
+          )
       );
 
       setDisplayedRecipes(filteredRecipes); //update displayed recipes with filtered results

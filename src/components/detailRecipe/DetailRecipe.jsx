@@ -5,7 +5,11 @@ import { useEffect, useState } from "react";
 import styles from "./DetailRecipe.module.css";
 
 export default function DetailRecipe({ recipeData }) {
-  const [displayedRecipe, setDisplayedRecipe] = useState([]);
+  const [displayedRecipe, setDisplayedRecipe] = useState({
+    title: "",
+    ingredients: [{ name: "", quantity: "", unit: "" }],
+    cookingInstructions: "",
+  });
 
   useEffect(() => {
     async function doDBOperations() {
@@ -25,7 +29,11 @@ export default function DetailRecipe({ recipeData }) {
         <>
           <h1>{displayedRecipe.title}</h1>
           <h2 className={styles.h2}>Ingredients</h2>
-          <p className={styles.p}>{displayedRecipe.ingredients}</p>
+          <ul className={styles.ul}>
+            {displayedRecipe.ingredients.map((ingredient, index) => (
+              <li key={index}>{`${ingredient.name} ${ingredient.quantity} ${ingredient.unit}`}</li>
+            ))}
+          </ul>
           <h2 className={styles.h2}>Cooking instructions</h2>
           <p>{displayedRecipe.cookingInstructions}</p>
         </>
