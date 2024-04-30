@@ -5,7 +5,6 @@ export default function AddRecipePage() {
   return (
     <>
       <h1>Add new recipe</h1>
-
       <AddRecipeForm />
     </>
   );

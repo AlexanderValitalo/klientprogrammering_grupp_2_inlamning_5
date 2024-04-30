@@ -44,14 +44,14 @@ export default function DetailRecipe({ recipeData }) {
     <div className={styles.recipeDiv}>
       {displayedRecipe && (
         <>
-          <h1>{displayedRecipe.title}</h1>
-          <h2 className={styles.h2}>Ingredients</h2>
+          <h2 className={styles.h2}>{displayedRecipe.title}</h2>
+          <h3 className={styles.h3}>Ingredients</h3>
           <ul className={styles.ul}>
             {displayedRecipe.ingredients.map((ingredient, index) => (
               <li key={index}>{`${ingredient.name} ${ingredient.quantity} ${ingredient.unit}`}</li>
             ))}
           </ul>
-          <h2 className={styles.h2}>Cooking instructions</h2>
+          <h3 className={styles.h3}>Cooking instructions</h3>
           <p>{displayedRecipe.cookingInstructions}</p>
           <div className={styles.buttonDiv}>
             <button className={`${styles.button} ${styles.removeButton}`} type="button" onClick={handleRemoveButtonClick}>
