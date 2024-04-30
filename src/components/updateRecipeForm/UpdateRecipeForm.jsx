@@ -2,23 +2,26 @@
 
 import React, { useState } from "react";
 import openDatabase from "@/data/db";
-import styles from "./AddRecipeForm.module.css";
+import styles from "./UpdateRecipeForm.module.css";
 import IngredientInput from "@/components/ingredientInput/IngredientInput.jsx";
+import { useRouter } from "next/navigation";
 
 const feedbackDuration = 3000;
-let addedTitle = "";
+let updatedTitle = "";
 
-export default function AddRecipeForm() {
+export default function UpdateRecipeForm ({recipeId}) {
   const [recipeExist, setRecipeExist] = useState(false);
-  const [addRecipeFeedback, setAddRecipeFeedback] = useState(false);
+  const [updateRecipeFeedback, setUpdateRecipeFeedback] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     ingredients: [{ name: "", quantity: "", unit: "" }],
     cookingInstructions: "",
   });
 
+  const router = useRouter();
+
   //Handles form submission
-  const handleCreateClick = async (event) => {
+  const handleUpdateClick = async (event) => {
     event.preventDefault();
 
     try {
@@ -42,27 +45,44 @@ export default function AddRecipeForm() {
 
       // Add the recipe to the database if it doesn't exist
       if (!recipeFound) {
-        await db.add("recipes", {
-          title: formData.title,
-          ingredients: formData.ingredients,
-          cookingInstructions: formData.cookingInstructions,
-        });
-      }
-      setAddRecipeFeedback(true); //set state to display feedback for added recipe
-      addedTitle = formData.title; //store title of added recipe for feedback display
+        // Assuming db is your IndexedDB database***************************************************
+        const transaction = db.transaction(['recipes'], 'readwrite');
+        const store = transaction.objectStore('recipes');
 
-      setFormData({
-        title: "",
-        ingredients: [{ name: "", quantity: "", unit: "" }],
-        cookingInstructions: "",
-      });
+        // Assuming you have a key associated with the record you want to update
+        const recordKey = parseInt(recipeId); // You need to provide the key of the record you want to update
+
+        // Retrieve the existing record using the key
+        const request = await store.get(recordKey);
+
+        if(request != undefined) {
+          // Update the existing record with the new data
+          request.title = formData.title;
+          request.ingredients = formData.ingredients;
+          request.cookingInstructions = formData.cookingInstructions;
+
+          // Put the updated record back into the object store
+          const updateRequest = store.put(request);
+        } else {
+          console.error('Error fetching record:', request.error);
+        }; //*************************************************************************** */
+      }
+      setUpdateRecipeFeedback(true); //set state to display feedback for added recipe
+      updatedTitle = formData.title; //store title of added recipe for feedback display
+
+      // setFormData({
+      //   title: "",
+      //   ingredients: [{ name: "", quantity: "", unit: "" }],
+      //   cookingInstructions: "",
+      // });
 
       //Timer hides feedback message after the set feedbackDuration time
       setTimeout(() => {
-        setAddRecipeFeedback(false);
+        setUpdateRecipeFeedback(false);
+        router.push(`/recipes/${recipeId}`);
       }, feedbackDuration);
     } catch (error) {
-      console.error("Error adding recipe to the database", error);
+      console.error("Error updating recipe to the database", error);
     }
   };
 
@@ -107,7 +127,7 @@ export default function AddRecipeForm() {
   //JSX rendering of component
   return (
     <>
-      <form className={styles.form} onSubmit={handleCreateClick} onChange={handleChangeForm}>
+      <form className={styles.form} onSubmit={handleUpdateClick} onChange={handleChangeForm}>
         <label htmlFor="title">Title</label>
         <input
           className={styles.input}
@@ -151,7 +171,7 @@ export default function AddRecipeForm() {
         />
 
         <button className={styles.button} type="submit">
-          Create recipe
+          Update recipe
         </button>
       </form>
 
@@ -159,7 +179,7 @@ export default function AddRecipeForm() {
         {recipeExist &&
           formData.title + " already exists in the cookbook, please choose another title"}
       </p>
-      <p className={styles.p}>{addRecipeFeedback && addedTitle + " has been added to the cookbook"}</p>
+      <p className={styles.p}>{updateRecipeFeedback && updatedTitle + " has been updated"}</p>
     </>
   );
 }

@@ -22,15 +22,22 @@
   margin-bottom: 1.2rem;
 }
 
-.removeButton {
-  flex-grow: 1;
+.button{
   min-width: fit-content;
   height: 1.6rem;
-  background-color: #c01b1b;
   color: white;
   border: none;
   cursor: pointer;
   border-radius: var(--border-radius);
   font-family: var(--font-mono);
+  padding: 0 0.5rem;
   margin-top: 0.2rem;
+}
+
+.removeButton {
+  background-color: #c01b1b;
+}
+
+.updateButton{
+  background-color: #1c26b8;
 }
