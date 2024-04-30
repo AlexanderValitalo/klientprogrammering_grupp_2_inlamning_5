@@ -21,3 +21,16 @@
 .p {
   margin-bottom: 1.2rem;
 }
+
+.removeButton {
+  flex-grow: 1;
+  min-width: fit-content;
+  height: 1.6rem;
+  background-color: #c01b1b;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--border-radius);
+  font-family: var(--font-mono);
+  margin-top: 0.2rem;
+}

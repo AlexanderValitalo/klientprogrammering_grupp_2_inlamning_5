@@ -155,11 +155,11 @@ export default function AddRecipeForm() {
         </button>
       </form>
 
-      <p>
+      <p className={styles.p}>
         {recipeExist &&
           formData.title + " already exists in the cookbook, please choose another title"}
       </p>
-      <p>{addRecipeFeedback && addedTitle + " has been added to the cookbook"}</p>
+      <p className={styles.p}>{addRecipeFeedback && addedTitle + " has been added to the cookbook"}</p>
     </>
   );
 }
