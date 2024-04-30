@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import openDatabase from "@/data/db";
 import styles from "./UpdateRecipeForm.module.css";
 import IngredientInput from "@/components/ingredientInput/IngredientInput.jsx";
@@ -20,6 +20,26 @@ export default function UpdateRecipeForm ({recipeId}) {
 
   const router = useRouter();
 
+  useEffect(() => {
+    async function fetchRecipe() {
+      const db = await openDatabase();
+      const transaction = db.transaction(["recipes"], "readonly");
+      const store = transaction.objectStore("recipes");
+      const request = await store.get(parseInt(recipeId));
+      if(request != undefined) {
+          setFormData({
+            title: request.title,
+            ingredients: [...request.ingredients],
+            cookingInstructions: request.cookingInstructions,
+          });
+      } else {
+        console.error("Error fetching recipe");
+      };
+    }
+
+    fetchRecipe();
+  }, []);
+
   //Handles form submission
   const handleUpdateClick = async (event) => {
     event.preventDefault();
@@ -33,9 +53,11 @@ export default function UpdateRecipeForm ({recipeId}) {
 
       // Check if the recipe already exists in the database
       recipes.forEach((recipe) => {
-        if (recipe.title == formData.title) {
-          setRecipeExist(true);
-          recipeFound = true;
+        if(recipe.id != recipeId) {
+          if (recipe.title == formData.title) {
+            setRecipeExist(true);
+            recipeFound = true;
+          }
         }
       });
 
@@ -69,12 +91,6 @@ export default function UpdateRecipeForm ({recipeId}) {
       }
       setUpdateRecipeFeedback(true); //set state to display feedback for added recipe
       updatedTitle = formData.title; //store title of added recipe for feedback display
-
-      // setFormData({
-      //   title: "",
-      //   ingredients: [{ name: "", quantity: "", unit: "" }],
-      //   cookingInstructions: "",
-      // });
 
       //Timer hides feedback message after the set feedbackDuration time
       setTimeout(() => {
@@ -170,8 +186,11 @@ export default function UpdateRecipeForm ({recipeId}) {
           onChange={handleChangeForm}
         />
 
-        <button className={styles.button} type="submit">
+        <button className={`${styles.button} ${styles.updateButton}`} type="submit">
           Update recipe
+        </button>
+        <button className={`${styles.button} ${styles.backButton}`} type="button" onClick={() => router.push(`/recipes/${recipeId}`)}>
+          Back
         </button>
       </form>
 

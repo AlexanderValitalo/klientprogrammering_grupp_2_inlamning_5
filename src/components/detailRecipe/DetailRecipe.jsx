@@ -53,12 +53,14 @@ export default function DetailRecipe({ recipeData }) {
           </ul>
           <h2 className={styles.h2}>Cooking instructions</h2>
           <p>{displayedRecipe.cookingInstructions}</p>
-          <button className={`${styles.button} ${styles.removeButton}`} type="button" onClick={handleRemoveButtonClick}>
-            Delete Recipe
-          </button>
-          <button className={`${styles.button} ${styles.updateButton}`} type="button" onClick={() => router.push(`/recipes/${recipeData.recipeId}/update`)}>
-            Update Recipe
-          </button>
+          <div className={styles.buttonDiv}>
+            <button className={`${styles.button} ${styles.removeButton}`} type="button" onClick={handleRemoveButtonClick}>
+              Delete Recipe
+            </button>
+            <button className={`${styles.button} ${styles.updateButton}`} type="button" onClick={() => router.push(`/recipes/${recipeData.recipeId}/update`)}>
+              Update Recipe
+            </button>
+          </div>
         </>
       )}
     </div>
