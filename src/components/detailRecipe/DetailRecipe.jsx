@@ -3,6 +3,7 @@
 import openDatabase from "@/data/db";
 import { useEffect, useState } from "react";
 import styles from "./DetailRecipe.module.css";
+import { useRouter } from "next/navigation";
 
 export default function DetailRecipe({ recipeData }) {
   const [displayedRecipe, setDisplayedRecipe] = useState({
@@ -10,6 +11,8 @@ export default function DetailRecipe({ recipeData }) {
     ingredients: [{ name: "", quantity: "", unit: "" }],
     cookingInstructions: "",
   });
+
+  const router = useRouter();
 
   useEffect(() => {
     async function doDBOperations() {
@@ -23,19 +26,41 @@ export default function DetailRecipe({ recipeData }) {
     doDBOperations();
   }, []);
 
+  const handleRemoveButtonClick = () => {
+    const isConfirmed = window.confirm('Are you sure you want to remove this item?');
+    if (isConfirmed) {
+      handleDeleteRecipe();
+    }
+  };
+  
+  const handleDeleteRecipe = async () => {
+    const db = await openDatabase();
+    const id = parseInt(recipeData.recipeId);
+    await db.delete("recipes", id);
+    router.push("/recipes");
+  };
+
   return (
     <div className={styles.recipeDiv}>
       {displayedRecipe && (
         <>
-          <h1>{displayedRecipe.title}</h1>
-          <h2 className={styles.h2}>Ingredients</h2>
+          <h2 className={styles.h2}>{displayedRecipe.title}</h2>
+          <h3 className={styles.h3}>Ingredients</h3>
           <ul className={styles.ul}>
             {displayedRecipe.ingredients.map((ingredient, index) => (
               <li key={index}>{`${ingredient.name} ${ingredient.quantity} ${ingredient.unit}`}</li>
             ))}
           </ul>
-          <h2 className={styles.h2}>Cooking instructions</h2>
+          <h3 className={styles.h3}>Cooking instructions</h3>
           <p>{displayedRecipe.cookingInstructions}</p>
+          <div className={styles.buttonDiv}>
+            <button className={`${styles.button} ${styles.removeButton}`} type="button" onClick={handleRemoveButtonClick}>
+              Delete Recipe
+            </button>
+            <button className={`${styles.button} ${styles.updateButton}`} type="button" onClick={() => router.push(`/recipes/${recipeData.recipeId}/update`)}>
+              Update Recipe
+            </button>
+          </div>
         </>
       )}
     </div>

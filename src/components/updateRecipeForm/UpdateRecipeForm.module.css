@@ -44,12 +44,19 @@
 .button {
   width: 50%;
   height: 2rem;
-  background-color: #4caf50;
   color: white;
   border: none;
   cursor: pointer;
   border-radius: var(--border-radius);
   font-family: var(--font-mono);
+}
+
+.updateButton{
+  background-color: #4caf50;
+}
+
+.backButton{
+  background-color: #1c26b8;
 }
 
 .p {

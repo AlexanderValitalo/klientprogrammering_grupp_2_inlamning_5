@@ -1,4 +1,4 @@
-import styles from "./AddRecipeForm.module.css";
+import styles from "./IngredientInput.module.css";
 
 export default function IngredientInput({
   ingredient,
