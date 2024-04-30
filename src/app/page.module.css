@@ -1,15 +1,6 @@
-.logo {
-  position: relative;
-  border-radius: 100%;
-  margin-bottom: 2rem;
-}
 
 @media screen and (max-width: 700px){
-  .logo{
-    width: 50%;
-    height: 50%;
-  }
-
+ 
   .center {
     display: flex;
     justify-content: center;
