@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 const feedbackDuration = 3000;
 let updatedTitle = "";
 
-export default function UpdateRecipeForm ({recipeId}) {
+export default function UpdateRecipeForm({ recipeId }) {
   const [recipeExist, setRecipeExist] = useState(false);
   const [updateRecipeFeedback, setUpdateRecipeFeedback] = useState(false);
   const [formData, setFormData] = useState({
@@ -26,15 +26,15 @@ export default function UpdateRecipeForm ({recipeId}) {
       const transaction = db.transaction(["recipes"], "readonly");
       const store = transaction.objectStore("recipes");
       const request = await store.get(parseInt(recipeId));
-      if(request != undefined) {
-          setFormData({
-            title: request.title,
-            ingredients: [...request.ingredients],
-            cookingInstructions: request.cookingInstructions,
-          });
+      if (request != undefined) {
+        setFormData({
+          title: request.title,
+          ingredients: [...request.ingredients],
+          cookingInstructions: request.cookingInstructions,
+        });
       } else {
         console.error("Error fetching recipe");
-      };
+      }
     }
 
     fetchRecipe();
@@ -53,7 +53,7 @@ export default function UpdateRecipeForm ({recipeId}) {
 
       // Check if the recipe already exists in the database
       recipes.forEach((recipe) => {
-        if(recipe.id != recipeId) {
+        if (recipe.id != recipeId) {
           if (recipe.title == formData.title) {
             setRecipeExist(true);
             recipeFound = true;
@@ -68,8 +68,8 @@ export default function UpdateRecipeForm ({recipeId}) {
       // Add the recipe to the database if it doesn't exist
       if (!recipeFound) {
         // Assuming db is your IndexedDB database***************************************************
-        const transaction = db.transaction(['recipes'], 'readwrite');
-        const store = transaction.objectStore('recipes');
+        const transaction = db.transaction(["recipes"], "readwrite");
+        const store = transaction.objectStore("recipes");
 
         // Assuming you have a key associated with the record you want to update
         const recordKey = parseInt(recipeId); // You need to provide the key of the record you want to update
@@ -77,7 +77,7 @@ export default function UpdateRecipeForm ({recipeId}) {
         // Retrieve the existing record using the key
         const request = await store.get(recordKey);
 
-        if(request != undefined) {
+        if (request != undefined) {
           // Update the existing record with the new data
           request.title = formData.title;
           request.ingredients = formData.ingredients;
@@ -86,8 +86,8 @@ export default function UpdateRecipeForm ({recipeId}) {
           // Put the updated record back into the object store
           const updateRequest = store.put(request);
         } else {
-          console.error('Error fetching record:', request.error);
-        }; //*************************************************************************** */
+          console.error("Error fetching record:", request.error);
+        } //*************************************************************************** */
       }
       setUpdateRecipeFeedback(true); //set state to display feedback for added recipe
       updatedTitle = formData.title; //store title of added recipe for feedback display
@@ -156,9 +156,7 @@ export default function UpdateRecipeForm ({recipeId}) {
           onChange={handleChangeForm}
         />
 
-        <label htmlFor="ingredient-div" className={styles.label}>
-          Ingredients
-        </label>
+        <p className={styles.label}>Ingredients</p>
         {formData.ingredients.map((ingredient, index) => (
           <IngredientInput
             key={index}
@@ -189,7 +187,11 @@ export default function UpdateRecipeForm ({recipeId}) {
         <button className={`${styles.button} ${styles.updateButton}`} type="submit">
           Update recipe
         </button>
-        <button className={`${styles.button} ${styles.backButton}`} type="button" onClick={() => router.push(`/recipes/${recipeId}`)}>
+        <button
+          className={`${styles.button} ${styles.backButton}`}
+          type="button"
+          onClick={() => router.push(`/recipes/${recipeId}`)}
+        >
           Back
         </button>
       </form>

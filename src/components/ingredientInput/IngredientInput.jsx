@@ -9,13 +9,13 @@ export default function IngredientInput({
 }) {
   return (
     <>
-      <div className={styles.ingredients} id="ingredient-div">
+      <div className={styles.ingredients}>
         <input
           className={`${styles.ingredientName} ${styles.input}`}
           type="text"
-          id="ingredient"
           name="ingredient"
           placeholder="Ingredient..."
+          aria-label={`Ingredient name ${index + 1}`}
           required
           value={ingredient.name}
           onChange={(e) => {
@@ -28,9 +28,9 @@ export default function IngredientInput({
         <input
           className={`${styles.ingredientInput} ${styles.input}`}
           type="number"
-          id="quantity"
           name="quantity"
           placeholder="Quantity..."
+          aria-label={`Ingredient quantity ${index + 1}`}
           required
           value={ingredient.quantity}
           onChange={(e) => {
@@ -43,9 +43,9 @@ export default function IngredientInput({
         <input
           className={`${styles.ingredientInput} ${styles.input}`}
           type="text"
-          id="unit"
           name="unit"
           placeholder="Unit..."
+          aria-label={`Ingredient unit ${index + 1}`}
           required
           value={ingredient.unit}
           onChange={(e) => {
