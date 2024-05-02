@@ -37,17 +37,25 @@ Vi har valt att använda SessionStorage till vår sökfunktion så att sökninge
 
 Fördelen med Sessionstorage är att den är enkel att använda och försvinner av sig självt när fliken stängs.
 
+## `Implementerade förbättringar`
+
+### `Komponentflyttning`
+
+I förra versionen hade vi nästan all kod direkt i respektive page vilket gjorde att allt blev klientrenderat eftersom vi behövde använda use client med denna lösningen. I den senaste versionen har vi skapat flera separata komponenter och flyttat ut mycket av koden, vilket har gjort så att delar av sidorna kan serverrenderas. En annan stor fördel med detta är för applikationens skalbarhet om man hade utökat projektet ytterligare i framtiden.
+
+### `Update/Delete`
+
+I förra versionen gick det bara att lägga till och läsa recept. I senaste versionen går det även att uppdatera befintliga recept och ta bort dem. Vid uppdatering så ser användaren det befintliga receptet så att man enkelt ser vad man vill uppdatera. När användaren trycker på "ta bort"-knappen så kommer det upp en förfrågan om man verkligen vill ta bort den, för att minska risken att man tar bort recept av misstag.
+
+### `Ingrediensinput`
+
+I förra versionen kunde användaren endast skriva in ingredienser i ett stort textfält, vilket funkar men inte är speciellt användarvänligt. I den senaste versionen kan användaren mata in varje ingrediens separat med separata fält för namn, mängd, och enhet. Användaren kan enkelt lägga till fler ingredienser, eller ångra sig och ta bort redan befintliga ingredienser. "IngredientInput" är en komponent som vi använder både när man lägger till recept och när de uppdateras.
+
+## `Teknisk genomgång`
+
 ## `Utmaningar och lösningar`
 
-- Första större problemet som vi stötte på var när vi skulle lägga till ett recept till Indexeddb. Problemet var inte att vi inte kunde lägga in recepten utan att det hela tiden blev 2 dubbletter som las in. Vi använde oss av useEffect och efter att vi hade Googlat runt en hel del så insåg vi att React renderar 2 gånger när man är i dev-mode. Lösningen på detta blev att vi hade en tidig return i useEffecten med hjälp av en hook som endast blev true om vi hade tryckt på "läggatillknappen" och som sattes till false i slutet av useEffecten. Detta fungerade kanon men mycket kod blev senare utbytt då vi gick över till att använda form istället.
 
-- Get by Id från Indexeddb var ett annat problem som vi fastnade på. Vi var mycket nära lösningen tidigt insåg vi efteråt för det enda som saknades var att vi var tvungna att parsa keyId:t från vår Indexeddb-databas för att kunna navigera till rätt route/id.
-
-- Validation av farliga tecken (whitelist/blacklist). Gruppen hade en idé om att bygga in säkerhet mot farliga tecken med tanke på diverse attacker från klientsidan. Efter handledning med Linus så fick vi veta att React hanterar sådant på egen hand så denna kod kunde vi ta bort.
-
-- Ändrade till form i add-recipe. Den tidigare lösningen med att ha 3 separata onChange, det vill säga en per inmatningsfält i add-recipe sidan, fick vi tips om att byta ut till en gemensam form med en enda onChange. Detta medförde att mycket kod kunde refaktoriseras.
-
-- onChange i formdatan. Ett problem som dock uppstod då vi gick över till form var att då vi skulle tömma inmatningsfälten så gjordes detta endast helt plötsligt i backenden men inte i frontenden. Detta hade fungerat tidigare. Lösningen blev att vi fick lägga samma onChange på vardera inmatningsfält inklusive value.
 
 - komponentflyttning
 - lazy loading
