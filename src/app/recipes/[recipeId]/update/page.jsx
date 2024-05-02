@@ -1,5 +1,6 @@
 import UpdateRecipeForm from '@/components/updateRecipeForm/UpdateRecipeForm';
 
+// UpdateRecipePage component
 export default function UpdateRecipePage({params}) {
   return (
     <>

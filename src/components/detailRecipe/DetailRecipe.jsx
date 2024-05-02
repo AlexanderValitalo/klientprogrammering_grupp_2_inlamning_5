@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import styles from "./DetailRecipe.module.css";
 import { useRouter } from "next/navigation";
 
+// DetailRecipe component
 export default function DetailRecipe({ recipeData }) {
   const [displayedRecipe, setDisplayedRecipe] = useState({
     title: "",
@@ -14,6 +15,7 @@ export default function DetailRecipe({ recipeData }) {
 
   const router = useRouter();
 
+  // Get the recipe from the database
   useEffect(() => {
     async function doDBOperations() {
       const db = await openDatabase();
@@ -26,6 +28,7 @@ export default function DetailRecipe({ recipeData }) {
     doDBOperations();
   }, []);
 
+  // Handle the remove button click
   const handleRemoveButtonClick = () => {
     const isConfirmed = window.confirm('Are you sure you want to remove this item?');
     if (isConfirmed) {
@@ -33,6 +36,7 @@ export default function DetailRecipe({ recipeData }) {
     }
   };
   
+  // Delete the recipe from the database
   const handleDeleteRecipe = async () => {
     const db = await openDatabase();
     const id = parseInt(recipeData.recipeId);

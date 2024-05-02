@@ -8,6 +8,7 @@ import IngredientInput from "@/components/ingredientInput/IngredientInput.jsx";
 const feedbackDuration = 3000;
 let addedTitle = "";
 
+//Component for adding a recipe to the cookbook
 export default function AddRecipeForm() {
   const [recipeExist, setRecipeExist] = useState(false);
   const [addRecipeFeedback, setAddRecipeFeedback] = useState(false);
@@ -21,6 +22,7 @@ export default function AddRecipeForm() {
   const handleCreateClick = async (event) => {
     event.preventDefault();
 
+    //Add recipe to the database
     try {
       const db = await openDatabase();
 
@@ -36,8 +38,9 @@ export default function AddRecipeForm() {
         }
       });
 
+      //If a recipe with this title already exists, exit function
       if (recipeFound) {
-        return; //If a recipe with this title already exists, exit function
+        return; 
       }
 
       // Add the recipe to the database if it doesn't exist
@@ -67,23 +70,12 @@ export default function AddRecipeForm() {
   };
 
   //Handles changes in the form fields
-  function handleChangeForm(event) {
+  const handleChangeForm = (event) => {
     const fieldName = event.target.name;
     const value = event.target.value;
 
     //Updates form data with the new value
     setFormData({ ...formData, [fieldName]: value });
-
-    // For nested objects within arrays, create a new array with updated values
-    if (fieldName === "ingredient" || fieldName === "quantity" || fieldName === "unit") {
-      const newIngredients = formData.ingredients.map((ingredient, index) => {
-        if (index.toString() === event.target.dataset.index) {
-          return { ...ingredient, [fieldName]: value };
-        }
-        return ingredient;
-      });
-      setFormData({ ...formData, ingredients: newIngredients });
-    }
 
     setRecipeExist(false);
   }

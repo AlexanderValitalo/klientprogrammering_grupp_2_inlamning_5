@@ -1,5 +1,6 @@
 import styles from "./IngredientInput.module.css";
 
+// IngredientInput component
 export default function IngredientInput({
   ingredient,
   index,
@@ -7,6 +8,21 @@ export default function IngredientInput({
   setFormData,
   removeIngredient,
 }) {
+
+  // Update the ingredient in the form data
+  const handleChangeIngredient = (event) => {
+    const newIngredients = [...formData.ingredients];
+    const fieldName = event.target.name;
+    if(fieldName === 'ingredient') {
+      newIngredients[index].name = event.target.value;
+    } else if(fieldName === 'quantity') {
+      newIngredients[index].quantity = event.target.value;
+    } else if(fieldName === 'unit') {
+      newIngredients[index].unit = event.target.value;
+    }
+    setFormData(formData.title, newIngredients, formData.cookingInstructions);
+  } 
+
   return (
     <>
       <div className={styles.ingredients}>
@@ -18,11 +34,7 @@ export default function IngredientInput({
           aria-label={`Ingredient name ${index + 1}`}
           required
           value={ingredient.name}
-          onChange={(e) => {
-            const newIngredients = [...formData.ingredients];
-            newIngredients[index].name = e.target.value;
-            setFormData(formData.title, newIngredients, formData.cookingInstructions);
-          }}
+          onChange={handleChangeIngredient}
         />
 
         <input
@@ -33,11 +45,7 @@ export default function IngredientInput({
           aria-label={`Ingredient quantity ${index + 1}`}
           required
           value={ingredient.quantity}
-          onChange={(e) => {
-            const newIngredients = [...formData.ingredients];
-            newIngredients[index].quantity = e.target.value;
-            setFormData(formData.title, newIngredients, formData.cookingInstructions);
-          }}
+          onChange={handleChangeIngredient}
         />
 
         <input
@@ -48,11 +56,7 @@ export default function IngredientInput({
           aria-label={`Ingredient unit ${index + 1}`}
           required
           value={ingredient.unit}
-          onChange={(e) => {
-            const newIngredients = [...formData.ingredients];
-            newIngredients[index].unit = e.target.value;
-            setFormData(formData.title, newIngredients, formData.cookingInstructions);
-          }}
+          onChange={handleChangeIngredient}
         />
 
         <button

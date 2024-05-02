@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 const feedbackDuration = 3000;
 let updatedTitle = "";
 
+//Component for updating a recipe
 export default function UpdateRecipeForm({ recipeId }) {
   const [recipeExist, setRecipeExist] = useState(false);
   const [updateRecipeFeedback, setUpdateRecipeFeedback] = useState(false);
@@ -20,6 +21,7 @@ export default function UpdateRecipeForm({ recipeId }) {
 
   const router = useRouter();
 
+  //Get the recipe to be updated from the database
   useEffect(() => {
     async function fetchRecipe() {
       const db = await openDatabase();
@@ -44,6 +46,7 @@ export default function UpdateRecipeForm({ recipeId }) {
   const handleUpdateClick = async (event) => {
     event.preventDefault();
 
+    // Update the recipe in the database
     try {
       const db = await openDatabase();
 
@@ -67,7 +70,7 @@ export default function UpdateRecipeForm({ recipeId }) {
 
       // Add the recipe to the database if it doesn't exist
       if (!recipeFound) {
-        // Assuming db is your IndexedDB database***************************************************
+        // Assuming db is your IndexedDB database
         const transaction = db.transaction(["recipes"], "readwrite");
         const store = transaction.objectStore("recipes");
 
@@ -87,7 +90,7 @@ export default function UpdateRecipeForm({ recipeId }) {
           const updateRequest = store.put(request);
         } else {
           console.error("Error fetching record:", request.error);
-        } //*************************************************************************** */
+        } 
       }
       setUpdateRecipeFeedback(true); //set state to display feedback for added recipe
       updatedTitle = formData.title; //store title of added recipe for feedback display
@@ -103,27 +106,17 @@ export default function UpdateRecipeForm({ recipeId }) {
   };
 
   //Handles changes in the form fields
-  function handleChangeForm(event) {
+  const handleChangeForm = (event) => {
     const fieldName = event.target.name;
     const value = event.target.value;
 
     //Updates form data with the new value
     setFormData({ ...formData, [fieldName]: value });
 
-    // For nested objects within arrays, create a new array with updated values
-    if (fieldName === "ingredient" || fieldName === "quantity" || fieldName === "unit") {
-      const newIngredients = formData.ingredients.map((ingredient, index) => {
-        if (index.toString() === event.target.dataset.index) {
-          return { ...ingredient, [fieldName]: value };
-        }
-        return ingredient;
-      });
-      setFormData({ ...formData, ingredients: newIngredients });
-    }
-
     setRecipeExist(false);
   }
 
+  //Adds a new ingredient to the form
   const addIngredient = () => {
     setFormData({
       ...formData,
@@ -131,6 +124,7 @@ export default function UpdateRecipeForm({ recipeId }) {
     });
   };
 
+  //Removes an ingredient from the form
   const removeIngredient = (index) => {
     const newIngredients = [...formData.ingredients];
     newIngredients.splice(index, 1);
