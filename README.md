@@ -51,18 +51,31 @@ I förra versionen gick det bara att lägga till och läsa recept. I senaste ver
 
 I förra versionen kunde användaren endast skriva in ingredienser i ett stort textfält, vilket funkar men inte är speciellt användarvänligt. I den senaste versionen kan användaren mata in varje ingrediens separat med separata fält för namn, mängd, och enhet. Användaren kan enkelt lägga till fler ingredienser, eller ångra sig och ta bort redan befintliga ingredienser. "IngredientInput" är en komponent som vi använder både när man lägger till recept och när de uppdateras.
 
+### `Tillgänglighetsanpassningar`
+
+Vi har följt de riktlinjer som krävs för tillgänglighetsanpassning. Detta innebär att vissa förbättringar gjordes, för mer information se den tekniska genomgången.
+
 ## `Teknisk genomgång`
+
+### `Optimering`
+
+- I uppgiften så ingick det att vi skulle visa på att vi kan lazy-loading. Vår sida har endast en bild på första sidan som i nuläget använder sig av lazy-loading då uppgiften krävde det. Vi vet om att egentligen så ska man inte ha lazy-loading på bilder som ska synas direkt när sidan laddas men för uppgiftens skull så har vi gjort det för att visa att vi kan det.
+
+- Vi har använt oss av Image-komponenten istället för img-taggen för att förbättra bildoptimeringen. Bilden har även specificerad width och height.
+
+- Som tidigare nämnt har vi flyttat ut mycket kod i flertalet separata komponenter vilket har gjort att vissa delar av sidorna kan serverrenderas vilket gör applikationen snabbare.
+
+- I förra versionen hade vi 96% i Performance enligt Lighthouse. I senaste versionen har vi 92%. Detta beror till största del på att vi enligt uppgiften har tvingats använda lazy-loading på en bild som inte behöver ha det egentligen.
+
+### `Tillgänglighet`
+
+- Semantisk html har använts, exempelvis header, main, footer, h1, h2, h3.
+- Inmatningsfälten har antingen id och tillhörande labels eller aria-labels för att underlätta för skärmläsare. För våra ingrediensinmatningsfält så löste vi det genom att ta med indexnummret i namnet på respektive aria-label exempelvis "Ingredient name 7" för den 7:e ingrediensens namn. 
+- Kontrasten var innan lite sämre i placeholders och navigationslänkarna i förra versionen men har nu förbättrats. 
+- Applikationen har anpassats för både lightmode och darkmode. Den kör det som din webbläsare är inställd på.
 
 ## `Utmaningar och lösningar`
 
+- När vi skulle göra vår update-funktion så hade vi lite problem med att hitta lösning på hur det går till med indexeddb, främst vad gäller "Key-värdet", dvs hur man skriver för att kunna updatera rätt objekt i databasen och inte enbart skapa ett nytt varje gång. Efter en hel del sökning så fann vi att vi var tvungna att parsa värdet till ett number. 
 
-
-- komponentflyttning
-- lazy loading
-- aria-labels
-- update
-- delete
-- standard
-- semantisk html
-- tillgänglighetsförbättringar ex knotrast
-- dynamisk ingridiensfältsuppbyggnad
+- Vid skapandet av våra dynamiska ingrediensfält så var det lite klurigt att komma på hur det skulle fungera då vi har titel på receptet som string, ingredienserna som en array med objekt och cookinginstructions som en string som vi ville ha som en gemensam hook för att hålla ihop det som ett recept. En del av lösningen var att vi "mappar" över alla ingredienser och skapade komponenten IngredientInput som kunde ta hand om ingrediensernas inmatning och värden. 

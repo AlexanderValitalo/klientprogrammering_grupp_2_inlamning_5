@@ -74,17 +74,6 @@ export default function AddRecipeForm() {
     //Updates form data with the new value
     setFormData({ ...formData, [fieldName]: value });
 
-    // For nested objects within arrays, create a new array with updated values
-    if (fieldName === "ingredient" || fieldName === "quantity" || fieldName === "unit") {
-      const newIngredients = formData.ingredients.map((ingredient, index) => {
-        if (index.toString() === event.target.dataset.index) {
-          return { ...ingredient, [fieldName]: value };
-        }
-        return ingredient;
-      });
-      setFormData({ ...formData, ingredients: newIngredients });
-    }
-
     setRecipeExist(false);
   }
 

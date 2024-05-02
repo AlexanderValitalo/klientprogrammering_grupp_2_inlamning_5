@@ -67,7 +67,7 @@ export default function UpdateRecipeForm({ recipeId }) {
 
       // Add the recipe to the database if it doesn't exist
       if (!recipeFound) {
-        // Assuming db is your IndexedDB database***************************************************
+        // Assuming db is your IndexedDB database
         const transaction = db.transaction(["recipes"], "readwrite");
         const store = transaction.objectStore("recipes");
 
@@ -87,7 +87,7 @@ export default function UpdateRecipeForm({ recipeId }) {
           const updateRequest = store.put(request);
         } else {
           console.error("Error fetching record:", request.error);
-        } //*************************************************************************** */
+        } 
       }
       setUpdateRecipeFeedback(true); //set state to display feedback for added recipe
       updatedTitle = formData.title; //store title of added recipe for feedback display
@@ -109,17 +109,6 @@ export default function UpdateRecipeForm({ recipeId }) {
 
     //Updates form data with the new value
     setFormData({ ...formData, [fieldName]: value });
-
-    // For nested objects within arrays, create a new array with updated values
-    if (fieldName === "ingredient" || fieldName === "quantity" || fieldName === "unit") {
-      const newIngredients = formData.ingredients.map((ingredient, index) => {
-        if (index.toString() === event.target.dataset.index) {
-          return { ...ingredient, [fieldName]: value };
-        }
-        return ingredient;
-      });
-      setFormData({ ...formData, ingredients: newIngredients });
-    }
 
     setRecipeExist(false);
   }
