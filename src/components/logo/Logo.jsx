@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import styles from './Logo.module.css';
 
+// Logo component
 export default function Logo() {
   return (
     <Image

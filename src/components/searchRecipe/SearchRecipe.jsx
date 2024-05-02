@@ -5,6 +5,7 @@ import openDatabase from "@/data/db";
 import Link from "next/link";
 import styles from "./SearchRecipe.module.css";
 
+//Component to search for recipes
 export default function SearchRecipe() {
   const [displayedRecipes, setDisplayedRecipes] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");

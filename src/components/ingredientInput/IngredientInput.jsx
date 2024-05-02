@@ -1,5 +1,6 @@
 import styles from "./IngredientInput.module.css";
 
+// IngredientInput component
 export default function IngredientInput({
   ingredient,
   index,
@@ -8,7 +9,8 @@ export default function IngredientInput({
   removeIngredient,
 }) {
 
-  function handleChangeIngredient(event) {
+  // Update the ingredient in the form data
+  const handleChangeIngredient = (event) => {
     const newIngredients = [...formData.ingredients];
     const fieldName = event.target.name;
     if(fieldName === 'ingredient') {

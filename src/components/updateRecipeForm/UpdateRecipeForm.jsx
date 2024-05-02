@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 const feedbackDuration = 3000;
 let updatedTitle = "";
 
+//Component for updating a recipe
 export default function UpdateRecipeForm({ recipeId }) {
   const [recipeExist, setRecipeExist] = useState(false);
   const [updateRecipeFeedback, setUpdateRecipeFeedback] = useState(false);
@@ -20,6 +21,7 @@ export default function UpdateRecipeForm({ recipeId }) {
 
   const router = useRouter();
 
+  //Get the recipe to be updated from the database
   useEffect(() => {
     async function fetchRecipe() {
       const db = await openDatabase();
@@ -44,6 +46,7 @@ export default function UpdateRecipeForm({ recipeId }) {
   const handleUpdateClick = async (event) => {
     event.preventDefault();
 
+    // Update the recipe in the database
     try {
       const db = await openDatabase();
 
@@ -103,7 +106,7 @@ export default function UpdateRecipeForm({ recipeId }) {
   };
 
   //Handles changes in the form fields
-  function handleChangeForm(event) {
+  const handleChangeForm = (event) => {
     const fieldName = event.target.name;
     const value = event.target.value;
 
@@ -113,6 +116,7 @@ export default function UpdateRecipeForm({ recipeId }) {
     setRecipeExist(false);
   }
 
+  //Adds a new ingredient to the form
   const addIngredient = () => {
     setFormData({
       ...formData,
@@ -120,6 +124,7 @@ export default function UpdateRecipeForm({ recipeId }) {
     });
   };
 
+  //Removes an ingredient from the form
   const removeIngredient = (index) => {
     const newIngredients = [...formData.ingredients];
     newIngredients.splice(index, 1);

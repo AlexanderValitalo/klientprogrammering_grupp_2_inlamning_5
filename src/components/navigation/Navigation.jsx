@@ -22,7 +22,7 @@ export default function Navigation() {
 
 // Component: NavigationLink
 // Description: Represents a single navigation link in the navigation menu.
-function NavigationLink({ href, text, description }) {
+const NavigationLink = ({ href, text, description }) => {
   return (
     <Link href={href} className={styles.card}>
       <h2>
