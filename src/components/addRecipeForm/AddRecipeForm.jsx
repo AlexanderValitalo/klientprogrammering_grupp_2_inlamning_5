@@ -120,9 +120,7 @@ export default function AddRecipeForm() {
           onChange={handleChangeForm}
         />
 
-        <label htmlFor="ingredient-div" className={styles.label}>
-          Ingredients
-        </label>
+        <p className={styles.label}>Ingredients</p>
         {formData.ingredients.map((ingredient, index) => (
           <IngredientInput
             key={index}
@@ -159,7 +157,9 @@ export default function AddRecipeForm() {
         {recipeExist &&
           formData.title + " already exists in the cookbook, please choose another title"}
       </p>
-      <p className={styles.p}>{addRecipeFeedback && addedTitle + " has been added to the cookbook"}</p>
+      <p className={styles.p}>
+        {addRecipeFeedback && addedTitle + " has been added to the cookbook"}
+      </p>
     </>
   );
 }

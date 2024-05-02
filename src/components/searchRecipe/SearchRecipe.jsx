@@ -50,9 +50,13 @@ export default function SearchRecipe() {
   //JSX rendering of component
   return (
     <>
+      <label className={styles.label} htmlFor="search">
+        Search recipe
+      </label>
       <input
         className={styles.input}
         type="text"
+        id="search"
         placeholder="Search recipes..."
         value={searchTerm}
         onChange={handleSearch}
