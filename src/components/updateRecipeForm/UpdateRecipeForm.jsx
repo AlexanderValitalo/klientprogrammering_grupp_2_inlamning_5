@@ -87,10 +87,10 @@ export default function UpdateRecipeForm({ recipeId }) {
           request.cookingInstructions = formData.cookingInstructions;
 
           // Put the updated record back into the object store
-          const updateRequest = store.put(request);
+          store.put(request);
         } else {
           console.error("Error fetching record:", request.error);
-        } 
+        }
       }
       setUpdateRecipeFeedback(true); //set state to display feedback for added recipe
       updatedTitle = formData.title; //store title of added recipe for feedback display
@@ -114,7 +114,7 @@ export default function UpdateRecipeForm({ recipeId }) {
     setFormData({ ...formData, [fieldName]: value });
 
     setRecipeExist(false);
-  }
+  };
 
   //Adds a new ingredient to the form
   const addIngredient = () => {
